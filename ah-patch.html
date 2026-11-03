@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Allen &amp; Heath Patch Sheet</title>
+<style>
+  :root{
+    --ink:#16181d; --hair:#c9ced8; --muted:#8a8f9a;
+    --thistle:#6a4f8c; --thistle-soft:#efeaf6;
+    --chrome:#1b1d22; --chrome-ink:#e9eaee;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:#e8eaef;color:var(--ink);
+    font-family:"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased}
+
+  .bar{position:sticky;top:0;z-index:20;background:var(--chrome);color:var(--chrome-ink);
+    display:flex;align-items:center;gap:18px;padding:12px 20px;flex-wrap:wrap}
+  .brand{display:flex;flex-direction:column;line-height:1.05}
+  .brand b{font-size:15px;letter-spacing:.14em}
+  .brand span{font-size:10px;letter-spacing:.34em;color:var(--muted)}
+  .spacer{flex:1}
+  .actions{display:flex;gap:8px;flex-wrap:wrap}
+  button{font:inherit;font-size:12px;letter-spacing:.04em;border:1px solid #3a3f4a;
+    background:#23262d;color:var(--chrome-ink);padding:8px 13px;border-radius:7px;cursor:pointer}
+  button:hover{border-color:var(--thistle);color:#fff}
+  button.primary{background:var(--thistle);border-color:var(--thistle);color:#fff}
+
+  /* device controls */
+  .controls{max-width:1280px;margin:0 auto;padding:16px 18px 0;display:flex;
+    gap:22px;align-items:flex-end;flex-wrap:wrap}
+  .ctl{display:flex;flex-direction:column;gap:5px}
+  .ctl label{font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:#6b7080}
+  select{font:inherit;font-size:15px;padding:9px 12px;border:1px solid #c4c9d3;border-radius:8px;
+    background:#fff;min-width:280px;color:var(--ink)}
+  select:focus{outline:none;border-color:var(--thistle);box-shadow:0 0 0 3px rgba(106,79,140,.18)}
+  .io{font-size:12.5px;color:#5a5f6a}
+  .io b{color:var(--ink)}
+  .exp{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+  .chk{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--ink);cursor:pointer;
+    user-select:none}
+  .chk input{width:17px;height:17px;accent-color:var(--thistle);cursor:pointer}
+  .chk.disabled{color:#b6bac3;cursor:not-allowed}
+  .chk.disabled input{cursor:not-allowed}
+
+  .wrap{padding:18px;display:flex;justify-content:center}
+  .panel{background:#fff;width:1240px;max-width:100%;border:1px solid var(--hair);
+    border-radius:6px;box-shadow:0 12px 40px rgba(20,24,32,.12);padding:16px 16px 14px}
+  .prompt{padding:60px 20px;text-align:center;color:#9aa0ab;font-size:15px;letter-spacing:.02em}
+
+  .pblock{margin:6px 0 22px}
+  .pcap{display:flex;align-items:baseline;gap:12px;margin:0 0 6px}
+  .pcap b{font-size:13px;letter-spacing:.16em;text-transform:uppercase}
+  .pcap .rule{flex:1;height:1px;background:var(--hair)}
+  .pcap .io{font-size:10.5px;letter-spacing:.12em;color:var(--muted)}
+  .pwrap{display:block}
+  svg.diagram{display:block;height:auto}
+
+  .lbl{width:100%;height:100%;border:1px solid #d3d7df;border-radius:3px;background:#fbfcfe;
+    text-align:center;font-family:"Courier New",ui-monospace,monospace;font-weight:700;
+    text-transform:uppercase;letter-spacing:.01em;color:var(--ink);padding:0 2px;line-height:1}
+  .lbl::placeholder{color:#d8dbe2;font-weight:400}
+  .lbl:focus{outline:none;background:var(--thistle-soft);border-color:var(--thistle);
+    box-shadow:0 0 0 1.5px var(--thistle)}
+
+  /* title block */
+  .titleblock{display:grid;grid-template-columns:170px repeat(4,1fr);
+    border:1.6px solid var(--ink);border-radius:4px;margin-top:8px;overflow:hidden}
+  .tb-cell{padding:8px 13px;border-left:1px solid var(--hair);
+    display:flex;flex-direction:column;gap:3px;min-height:66px;justify-content:center}
+  .tb-cell .cap{font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+  .tb-cell input{border:none;background:transparent;font-size:15px;font-weight:600;
+    color:var(--ink);padding:2px 0;width:100%;font-family:inherit}
+  .tb-cell input:focus{outline:none;background:var(--thistle-soft);border-radius:3px}
+  .logocell{border-left:none;padding:8px;display:flex;align-items:center;justify-content:center;
+    position:relative;cursor:pointer}
+  .logocell img{max-width:100%;max-height:58px;object-fit:contain}
+  .logocell .ph{font-size:9.5px;letter-spacing:.16em;color:#b8bdc7;text-transform:uppercase;
+    border:1px dashed #cfd4dd;border-radius:5px;padding:16px 8px;width:100%;text-align:center}
+  .logocell .rm{position:absolute;top:3px;right:5px;font-size:14px;line-height:1;color:#aaa;
+    background:#fff;border:1px solid var(--hair);border-radius:50%;width:18px;height:18px;
+    display:none;align-items:center;justify-content:center;cursor:pointer}
+  .logocell:hover .rm{display:flex}
+
+  @page{size:A4 landscape;margin:8mm}
+  @media print{
+    body{background:#fff}
+    .bar,.controls{display:none!important}
+    .wrap{padding:0}
+    .panel{width:100%;border:none;box-shadow:none;border-radius:0;padding:0}
+    .pblock{break-inside:avoid}
+    .lbl{-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#fff;border-color:#bcc1cb}
+    .titleblock{-webkit-print-color-adjust:exact;print-color-adjust:exact;break-inside:avoid}
+    .logocell{cursor:default}.logocell .ph{display:none}.logocell .rm{display:none!important}
+  }
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <div class="brand"><b>BLACK THISTLE</b><span>AUDIO</span></div>
+  <div class="spacer"></div>
+  <div class="actions">
+    <button class="primary" onclick="window.print()">Print</button>
+    <button onclick="pickLogo()">Add logo</button>
+    <button onclick="exportJSON()">Save file</button>
+    <button onclick="document.getElementById('imp').click()">Load file</button>
+    <button onclick="clearAll()">Clear</button>
+    <input id="logoInp" type="file" accept="image/*" style="display:none" onchange="loadLogo(event)">
+    <input id="imp" type="file" accept="application/json" style="display:none" onchange="importJSON(event)">
+  </div>
+</div>
+
+<div class="controls">
+  <div class="ctl">
+    <label>Choose your stage box or mix rack</label>
+    <select id="device" onchange="onDevice()">
+      <option value="" disabled selected>— Select a device —</option>
+      <optgroup label="dLive MixRacks">
+        <option value="DM64">DM64</option>
+        <option value="DM48">DM48</option>
+        <option value="DM32">DM32</option>
+        <option value="CDM64">CDM64</option>
+        <option value="CDM48">CDM48</option>
+        <option value="CDM32">CDM32</option>
+      </optgroup>
+      <optgroup label="Stage boxes / AudioRacks">
+        <option value="GX4816">GX4816</option>
+        <option value="DX168">DX168</option>
+        <option value="AR2412">AR2412</option>
+        <option value="AB168">AB168</option>
+      </optgroup>
+    </select>
+    <div class="io" id="ioSummary"></div>
+  </div>
+  <div class="exp" id="expControls"></div>
+</div>
+
+<div class="wrap"><div class="panel">
+  <div id="sheet"><div class="prompt">Select a device above to start labelling.</div></div>
+
+  <div class="titleblock">
+    <div class="logocell" id="logoCell" onclick="pickLogo()">
+      <span class="ph" id="logoPh">Add logo</span>
+      <img id="logoImg" style="display:none" alt="logo">
+      <span class="rm" id="logoRm" title="Remove logo" onclick="removeLogo(event)">&times;</span>
+    </div>
+    <div class="tb-cell"><span class="cap">Show / Event</span>
+      <input id="showName" placeholder="Just Jovi — Carnegie Hall" autocomplete="off"></div>
+    <div class="tb-cell"><span class="cap">Engineer</span>
+      <input id="engineer" placeholder="Liam" autocomplete="off"></div>
+    <div class="tb-cell"><span class="cap">Date</span>
+      <input id="showDate" type="date"></div>
+    <div class="tb-cell"><span class="cap">Document Version</span>
+      <input id="docVersion" placeholder="v1.0" autocomplete="off"></div>
+  </div>
+</div></div>
+
+<script>
+const NS="http://www.w3.org/2000/svg", STROKE="#1c1c1c";
+const R=20, PITCH=66, ROWPITCH=92, EAR=46, IN_X0=112;
+
+/* ---------- device specs (verified I/O) ---------- */
+const SPECS={
+  GX4816:{name:"GX4816", long:"GX4816 Stage Box",   ins:48,outs:16,inCols:12,outCols:4, ports:["Link","GX1","GX2"], dualPSU:false, expander:"DX168", maxExp:2},
+  DM64:{  name:"DM64",   long:"dLive DM64 MixRack",  ins:64,outs:32,inCols:16,outCols:8, ports:["gigaACE","DX","Net"], dualPSU:true,  expander:"DX168", maxExp:2},
+  DM48:{  name:"DM48",   long:"dLive DM48 MixRack",  ins:48,outs:24,inCols:12,outCols:6, ports:["gigaACE","DX","Net"], dualPSU:true,  expander:"DX168", maxExp:2},
+  DM32:{  name:"DM32",   long:"dLive DM32 MixRack",  ins:32,outs:16,inCols:8, outCols:4, ports:["gigaACE","DX","Net"], dualPSU:true,  expander:"DX168", maxExp:2},
+  CDM64:{ name:"CDM64",  long:"dLive CDM64 MixRack", ins:64,outs:32,inCols:16,outCols:8, ports:["gigaACE","DX","Net"], dualPSU:false, expander:"DX168", maxExp:2},
+  CDM48:{ name:"CDM48",  long:"dLive CDM48 MixRack", ins:48,outs:24,inCols:12,outCols:6, ports:["gigaACE","DX","Net"], dualPSU:false, expander:"DX168", maxExp:2},
+  CDM32:{ name:"CDM32",  long:"dLive CDM32 MixRack", ins:32,outs:16,inCols:8, outCols:4, ports:["gigaACE","DX","Net"], dualPSU:false, expander:"DX168", maxExp:2},
+  DX168:{ name:"DX168",  long:"DX168 Expander",      ins:16,outs:8, inCols:8, outCols:4, ports:["DX A","DX B"], dualPSU:false, expander:null},
+  AR2412:{name:"AR2412", long:"AR2412 AudioRack",    ins:24,outs:12,inCols:12,outCols:6, ports:["dSNAKE","MON","EXP"], dualPSU:false, expander:"AB168", maxExp:1},
+  AB168:{ name:"AB168",  long:"AB168 AudioRack",     ins:16,outs:8, inCols:8, outCols:4, ports:["dSNAKE","EXP"], dualPSU:false, expander:null}
+};
+
+/* ---------- state ---------- */
+const KEY="bta_ah_patch_v1";
+let state={device:"", dx1:false, dx2:false, ab1:false, labels:{}, meta:{}, logo:null};
+
+/* ---------- drawing primitives ---------- */
+function xlr(cx,cy,female,num){
+  const nw=R*0.42,nh=R*0.34;let g="";
+  g+=`<rect x="${(cx-nw/2).toFixed(1)}" y="${(cy-R-nh*0.45).toFixed(1)}" width="${nw.toFixed(1)}" height="${nh.toFixed(1)}" rx="2" fill="#fff" stroke="${STROKE}" stroke-width="1.3"/>`;
+  g+=`<circle cx="${cx}" cy="${cy}" r="${R}" fill="#fff" stroke="${STROKE}" stroke-width="1.7"/>`;
+  g+=`<circle cx="${cx}" cy="${cy}" r="${(R*0.72).toFixed(1)}" fill="none" stroke="${STROKE}" stroke-width="0.9"/>`;
+  const ri=R*0.40, pr=R*0.13;
+  [-90,30,150].forEach(a=>{
+    const x=cx+ri*Math.cos(a*Math.PI/180), y=cy+ri*Math.sin(a*Math.PI/180);
+    g+= female
+      ? `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${pr.toFixed(1)}" fill="none" stroke="${STROKE}" stroke-width="1.1"/>`
+      : `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(pr*0.8).toFixed(1)}" fill="${STROKE}"/>`;
+  });
+  g+=`<text x="${cx}" y="${(cy-R-8).toFixed(1)}" font-family="Arial" font-size="14" font-weight="700" fill="${STROKE}" text-anchor="middle">${num}</text>`;
+  return g;
+}
+function labelBox(cx,cy,w,id){
+  const x=cx-w/2, y=cy+R+5, h=22;
+  return `<foreignObject x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${w}" height="${h}">`
+    +`<div xmlns="http://www.w3.org/1999/xhtml" style="width:100%;height:100%">`
+    +`<input class="lbl" id="${id}" autocomplete="off" spellcheck="false" placeholder="—" style="font-size:12px"/>`
+    +`</div></foreignObject>`;
+}
+function etherc(cx,cy,w,h,label){
+  let g=`<rect x="${cx-w/2}" y="${cy-h/2}" width="${w}" height="${h}" rx="6" fill="#fff" stroke="${STROKE}" stroke-width="1.6"/>`;
+  const iw=w*0.5, ih=h*0.5;
+  g+=`<rect x="${cx-iw/2}" y="${cy-ih/2+ih*0.08}" width="${iw}" height="${ih}" rx="1.5" fill="none" stroke="${STROKE}" stroke-width="1.1"/>`;
+  g+=`<rect x="${cx-iw*0.18}" y="${cy-ih/2-ih*0.10}" width="${iw*0.36}" height="${ih*0.22}" rx="1" fill="none" stroke="${STROKE}" stroke-width="1"/>`;
+  g+=`<text x="${cx}" y="${cy-h/2-6}" font-family="Arial" font-size="12" font-weight="700" fill="${STROKE}" text-anchor="middle">${label}</text>`;
+  return g;
+}
+function iecInlet(cx,cy){
+  let g=`<rect x="${cx-26}" y="${cy-22}" width="52" height="44" rx="4" fill="#fff" stroke="${STROKE}" stroke-width="1.6"/>`;
+  g+=`<path d="M ${cx-15} ${cy+8} L ${cx-11} ${cy-6} L ${cx+11} ${cy-6} L ${cx+15} ${cy+8} Z" fill="none" stroke="${STROKE}" stroke-width="1.2"/>`;
+  [-7,0,7].forEach(dx=>g+=`<line x1="${cx+dx}" y1="${cy-2}" x2="${cx+dx}" y2="${cy+4}" stroke="${STROKE}" stroke-width="1.4"/>`);
+  return g;
+}
+
+/* ---------- panel renderer ---------- */
+function renderPanel(spec,prefix){
+  const inRows=Math.ceil(spec.ins/spec.inCols), outRows=Math.ceil(spec.outs/spec.outCols);
+  const rowsMax=Math.max(inRows,outRows);
+  const inLast=IN_X0+(spec.inCols-1)*PITCH;
+  const OUT_X0=inLast+90;
+  const outLast=OUT_X0+(spec.outCols-1)*PITCH;
+  const W=Math.round(outLast+96);
+  const lastRowY=86+(rowsMax-1)*ROWPITCH;
+  const stripY=lastRowY+R+5+22+60;
+  const H=Math.round(stripY+82);
+  const LW=PITCH-6;
+  let s="";
+  s+=`<rect x="0" y="0" width="${W}" height="${H}" fill="#fff"/>`;
+  // ears
+  function ear(x0){let g=`<rect x="${x0}" y="6" width="${EAR}" height="${H-12}" rx="8" fill="#fff" stroke="${STROKE}" stroke-width="1.7"/>`;
+    for(let i=0;i<4;i++){const cy=70+i*((H-150)/3);g+=`<rect x="${x0+EAR/2-7}" y="${cy-14}" width="14" height="28" rx="7" fill="none" stroke="${STROKE}" stroke-width="1.4"/>`;}return g;}
+  s+=ear(2)+ear(W-EAR-2);
+  s+=`<rect x="${EAR+10}" y="8" width="${W-2*(EAR+10)}" height="${H-16}" rx="6" fill="#fff" stroke="${STROKE}" stroke-width="2"/>`;
+  s+=`<text x="${IN_X0-26}" y="40" font-family="Arial" font-size="18" font-weight="700" fill="${STROKE}">Inputs</text>`;
+  s+=`<text x="${OUT_X0-26}" y="40" font-family="Arial" font-size="18" font-weight="700" fill="${STROKE}">Outputs</text>`;
+  const rowY=r=>86+r*ROWPITCH;
+  for(let n=1;n<=spec.ins;n++){const r=Math.floor((n-1)/spec.inCols),c=(n-1)%spec.inCols;
+    const cx=IN_X0+c*PITCH, cy=rowY(r); s+=xlr(cx,cy,true,n)+labelBox(cx,cy,LW,prefix+"_in"+n);}
+  for(let n=1;n<=spec.outs;n++){const r=Math.floor((n-1)/spec.outCols),c=(n-1)%spec.outCols;
+    const cx=OUT_X0+c*PITCH, cy=rowY(r); s+=xlr(cx,cy,false,n)+labelBox(cx,cy,LW,prefix+"_out"+n);}
+  // bottom strip
+  const by=stripY;
+  s+=iecInlet(150,by);
+  s+=`<rect x="${208-16}" y="${by-20}" width="32" height="40" rx="3" fill="#fff" stroke="${STROKE}" stroke-width="1.5"/>`;
+  s+=`<line x1="208" y1="${by-14}" x2="208" y2="${by+14}" stroke="${STROKE}" stroke-width="1.1"/>`;
+  s+=`<text x="200" y="${by+5}" font-family="Arial" font-size="11" text-anchor="middle">I</text><text x="216" y="${by+5}" font-family="Arial" font-size="11" text-anchor="middle">O</text>`;
+  s+=`<text x="168" y="${by-30}" font-family="Arial" font-size="11" text-anchor="middle">~100-240V</text>`;
+  if(spec.dualPSU){ s+=iecInlet(290,by);
+    s+=`<text x="290" y="${by-30}" font-family="Arial" font-size="10" text-anchor="middle">PSU 2</text>`; }
+  // wordmark
+  s+=`<text x="${W/2}" y="${by-4}" font-family="Arial" font-size="30" font-weight="800" fill="${STROKE}" text-anchor="middle" letter-spacing="1">${spec.name}</text>`;
+  s+=`<text x="${W/2}" y="${by+24}" font-family="Arial" font-size="19" font-weight="800" fill="${STROKE}" text-anchor="middle" letter-spacing="1">ALLEN&amp;HEATH</text>`;
+  // network ports + earth (right)
+  const p=spec.ports, rightEdge=W-EAR-26, lastC=rightEdge-23, firstC=lastC-(p.length-1)*100;
+  p.forEach((lab,k)=>s+=etherc(firstC+k*100,by,44,50,lab));
+  const ex=firstC-58;
+  s+=`<circle cx="${ex}" cy="${by}" r="11" fill="#fff" stroke="${STROKE}" stroke-width="1.5"/>`;
+  s+=`<line x1="${ex}" y1="${by-7}" x2="${ex}" y2="${by}" stroke="${STROKE}" stroke-width="1.3"/>`;
+  [10,6,3].forEach((wd,i)=>s+=`<line x1="${ex-wd/2}" y1="${by+i*3}" x2="${ex+wd/2}" y2="${by+i*3}" stroke="${STROKE}" stroke-width="1.3"/>`);
+
+  return {svg:`<svg class="diagram" viewBox="0 0 ${W} ${H}" xmlns="${NS}">${s}</svg>`, width:W};
+}
+
+/* ---------- sheet assembly ---------- */
+function activePanels(){
+  const list=[];
+  if(!state.device) return list;
+  const m=SPECS[state.device];
+  list.push({spec:m,prefix:"M",title:m.long});
+  if(m.expander==="DX168"){
+    if(state.dx1) list.push({spec:SPECS.DX168,prefix:"D1",title:"DX168 — Expander 1"});
+    if(state.dx2) list.push({spec:SPECS.DX168,prefix:"D2",title:"DX168 — Expander 2"});
+  }
+  if(m.expander==="AB168" && state.ab1) list.push({spec:SPECS.AB168,prefix:"A1",title:"AB168 — Expander"});
+  return list;
+}
+function buildSheet(){
+  const sheet=document.getElementById("sheet");
+  const panels=activePanels();
+  if(!panels.length){ sheet.innerHTML=`<div class="prompt">Select a device above to start labelling.</div>`; return; }
+  const rendered=panels.map(p=>({...p,...renderPanel(p.spec,p.prefix)}));
+  const maxW=Math.max(...rendered.map(r=>r.width));
+  sheet.innerHTML=rendered.map(r=>{
+    const wpc=(r.width/maxW*100).toFixed(2);
+    return `<div class="pblock">
+      <div class="pcap"><b>${r.title}</b><span class="rule"></span><span class="io">${r.spec.ins} in / ${r.spec.outs} out</span></div>
+      <div class="pwrap"><div style="width:${wpc}%">${r.svg}</div></div>
+    </div>`;
+  }).join("");
+  // restore typed values
+  sheet.querySelectorAll("input.lbl").forEach(el=>{ if(state.labels[el.id]!=null) el.value=state.labels[el.id]; });
+}
+
+/* ---------- controls ---------- */
+function onDevice(){
+  state.device=document.getElementById("device").value;
+  state.dx1=state.dx2=state.ab1=false;
+  buildControls(); buildSheet(); save();
+}
+function buildControls(){
+  const c=document.getElementById("expControls");
+  const io=document.getElementById("ioSummary");
+  if(!state.device){ c.innerHTML=""; io.innerHTML=""; return; }
+  const m=SPECS[state.device];
+  let exTxt = m.expander==="DX168" ? " · up to 2× DX168"
+            : m.expander==="AB168" ? " · + 1× AB168" : "";
+  io.innerHTML=`<b>${m.name}</b> · ${m.ins} in / ${m.outs} out${exTxt}`;
+  if(m.expander==="DX168"){
+    c.innerHTML=`
+      <label class="chk"><input type="checkbox" id="cdx1" ${state.dx1?"checked":""} onchange="onDx(1)"> Add DX168</label>
+      <label class="chk ${state.dx1?"":"disabled"}" id="cdx2wrap">
+        <input type="checkbox" id="cdx2" ${state.dx2?"checked":""} ${state.dx1?"":"disabled"} onchange="onDx(2)"> Add second DX168</label>`;
+  } else if(m.expander==="AB168"){
+    c.innerHTML=`<label class="chk"><input type="checkbox" id="cab1" ${state.ab1?"checked":""} onchange="onAb()"> Add AB168</label>`;
+  } else { c.innerHTML=`<span class="io">No expanders for this unit</span>`; }
+}
+function onDx(n){
+  if(n===1){ state.dx1=document.getElementById("cdx1").checked; if(!state.dx1) state.dx2=false; }
+  else { state.dx2=document.getElementById("cdx2").checked; }
+  buildControls(); buildSheet(); save();
+}
+function onAb(){ state.ab1=document.getElementById("cab1").checked; buildSheet(); save(); }
+
+/* ---------- logo ---------- */
+function pickLogo(){document.getElementById("logoInp").click();}
+function loadLogo(ev){const f=ev.target.files[0];if(!f)return;const r=new FileReader();
+  r.onload=()=>{setLogo(r.result);save();};r.readAsDataURL(f);ev.target.value="";}
+function setLogo(d){state.logo=d;const img=logoImg,ph=logoPh,rm=logoRm;
+  if(d){img.src=d;img.style.display="block";ph.style.display="none";rm.style.display="";}
+  else{img.removeAttribute("src");img.style.display="none";ph.style.display="";rm.style.display="none";}}
+function removeLogo(e){e.stopPropagation();setLogo(null);save();}
+
+/* ---------- persistence ---------- */
+const META=["showName","engineer","showDate","docVersion"];
+function save(){try{
+  state.meta={};META.forEach(id=>state.meta[id]=document.getElementById(id).value);
+  localStorage.setItem(KEY,JSON.stringify(state));
+}catch(e){}}
+function restoreMeta(){META.forEach(id=>{if(state.meta&&state.meta[id]!=null)document.getElementById(id).value=state.meta[id];});}
+function load(){try{const s=localStorage.getItem(KEY);if(!s)return;const o=JSON.parse(s);
+  state=Object.assign({device:"",dx1:false,dx2:false,ab1:false,labels:{},meta:{},logo:null},o);
+  if(state.device)document.getElementById("device").value=state.device;
+  restoreMeta(); setLogo(state.logo||null);
+}catch(e){}}
+
+document.addEventListener("input",e=>{
+  const t=e.target;
+  if(t.classList&&t.classList.contains("lbl")){ state.labels[t.id]=t.value; save(); }
+  else if(META.includes(t.id)){ save(); }
+});
+
+function clearAll(){
+  if(!confirm("Clear all socket labels? (Device, title block and logo are kept.)"))return;
+  state.labels={};
+  document.querySelectorAll("input.lbl").forEach(el=>el.value="");
+  save();
+}
+function exportJSON(){
+  save();
+  const name=(state.meta.showName||state.device||"ah-patch").replace(/[^a-z0-9\-_]+/gi,"_").toLowerCase();
+  const b=new Blob([JSON.stringify(state,null,2)],{type:"application/json"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=name+".json";a.click();
+  URL.revokeObjectURL(a.href);
+}
+function importJSON(ev){const f=ev.target.files[0];if(!f)return;const r=new FileReader();
+  r.onload=()=>{try{
+    const o=JSON.parse(r.result);
+    state=Object.assign({device:"",dx1:false,dx2:false,ab1:false,labels:{},meta:{},logo:null},o);
+    document.getElementById("device").value=state.device||"";
+    restoreMeta(); setLogo(state.logo||null); buildControls(); buildSheet(); save();
+  }catch(e){alert("That file isn't a valid patch sheet.");}};
+  r.readAsText(f);ev.target.value="";}
+
+/* ---------- init ---------- */
+load(); buildControls(); buildSheet();
+</script>
+</body>
+</html>
